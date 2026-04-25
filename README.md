@@ -1,84 +1,3 @@
-# Cattle MSA Processor 
-
-[![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-**一个高性能、模块化的工具包，用于将多物种全基因组比对 (MAF) 数据转换为适用于深度学习模型训练的格式。**
-
----
-
-## 功能概述 
-
-本工具包提供了一个完整的流水线，用于处理大规模的多物种比对数据：
-1.  **物种列表提取**：快速扫描 MAF 目录，提取所有物种名称。
-2.  **数据过滤（可选）**：根据目标物种列表，缩减 MAF 文件体积。
-3.  **高效格式转换**：将 MAF 文件转换为内存/磁盘友好的 **Zarr 张量格式** (形状: `[基因组位置, 物种数]`)。支持并行化和极速编码。
-4.  **训练样本生成**：从 Zarr 数据中滑动生成高质量的训练/验证/测试窗口坐标 (Parquet 格式)，并进行严格的质量控制。
-
-## 主要特性 
-*   **极速处理**：利用 NumPy 向量化操作和内存映射，高效处理海量基因组数据。
-*   **节省存储**：使用 `int8` 存储编码后的序列，并使用高压缩率的 Zarr 格式，大幅节省磁盘空间。
-*   **即用型输出**：生成的 Zarr 和 Parquet 文件可直接与 PyTorch/TensorFlow 等主流框架集成，方便流式数据加载。
-*   **用户友好**：提供统一的命令行接口，支持模块化分步执行。
-
-## 安装 
-
-### 从源码安装（推荐用于开发）
-bash
-
-git clone <您的仓库地址>
-
-cd cattle-msa-processor
-### 从 PyPI 安装
-pip install -e .
-
-bash
-
-pip install cattle-msa-processor
-## 快速开始 🚀
-
-假设您有一组 `.maf` 文件存储在 `/path/to/maf_files` 目录中。
-
-**第一步：获取物种列表**
-bash
-
-cattle-msa-processor list-species --maf_dir /path/to/maf_files
-
-此命令会扫描目录并输出所有物种名称的列表。
-
-**第二步（可选）：过滤物种**
-假设您只想保留 `bosTau9` (牛), `hg38` (人), `mm10` (鼠) 的数据。
-bash
-
-cattle-msa-processor filter \
-
---maf_dir /path/to/maf_files \
-
---species bosTau9,hg38,mm10
-*注意：此操作会**覆盖**原MAF文件，建议先备份。*
-
-**第三步：转换为 Zarr 格式**
-bash
-
-cattle-msa-processor convert \
-
---maf_dir /path/to/maf_files \
-
---output_zarr ./output/msa_data.zarr \
-
---ref_species bosTau9 \
-
---species_list bosTau9,hg38,mm10 \
-
---chunk_size 100000
-**第四步：生成训练窗口**
-您问的是 README.md应该写什么。对于一个像“牛多物种比对数据处理工具”这样的专业软件包，一个优秀的 README.md是项目成功的关键。它需要清晰、全面地引导用户。
-
-以下是针对您的 cattle-msa-processor​ 项目的 README.md​ 应包含的核心内容与结构建议。您可以以此为基础，填充具体信息。
-
-README.md内容模板
-markdown
-复制
 # Cattle MSA Processor 🐂
 
 [![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
@@ -108,20 +27,13 @@ markdown
 
 bash
 
-git clone <您的仓库地址>
+git clone https://github.com/richardcarleliot-sz/cattle-msa-processor
 
 cd cattle-msa-processor
 
 pip install -e .
 
-复制
-### 从 PyPI 安装（发布后）
 
-bash
-
-pip install cattle-msa-processor
-
-复制
 ## 快速开始 🚀
 
 假设您有一组 `.maf` 文件存储在 `/path/to/maf_files` 目录中。
@@ -132,7 +44,7 @@ bash
 
 cattle-msa-processor list-species --maf_dir /path/to/maf_files
 
-复制
+
 此命令会扫描目录并输出所有物种名称的列表。
 
 **第二步（可选）：过滤物种**
@@ -146,7 +58,7 @@ cattle-msa-processor filter \
 
 --species bosTau9,hg38,mm10
 
-复制
+
 *注意：此操作会**覆盖**原MAF文件，建议先备份。*
 
 **第三步：转换为 Zarr 格式**
@@ -165,7 +77,7 @@ cattle-msa-processor convert \
 
 --chunk_size 100000
 
-复制
+
 **第四步：生成训练窗口**
 
 bash
